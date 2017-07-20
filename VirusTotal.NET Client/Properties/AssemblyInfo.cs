@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VirusTotal.NET")]
+[assembly: AssemblyTitle("VirusTotal.NET Client")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("VirusTotal.NET")]
+[assembly: AssemblyProduct("VirusTotal.NET Client")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7ab9ea3b-169c-4868-af2f-8b0283a31816")]
+[assembly: Guid("f8910b92-b3a5-4900-b1d2-2d0b3b908d6b")]
 
 // Version information for an assembly consists of the following four values:
 //
