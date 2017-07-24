@@ -154,6 +154,71 @@ namespace VirusTotalNET
             }
         }
 
+        public const int ScanCompleteDelayBetweenFileReportRequestsMs = 16 * 1000; //only 4 request per minute allowed        
+
+        /// <summary>
+        /// Requests a report. If necessay, performs a file scan.
+        /// Checks every 16 seconds for result finally returns.
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <returns>A Tuple. Item 1 is positives count (goal: 0). Item 2 is Virus Total permalink for scan.</returns>
+        public async Task<Tuple<int, string>> ScanFileComplete(FileInfo fileInfo)
+        {
+            //todo implement time out auto cancel at five minutes
+
+            Console.WriteLine($"Getting File Report: {fileInfo.FullName}");
+
+            var fileReport = await GetFileReport(fileInfo);
+            var scanId = string.Empty;
+
+            while (fileReport.ResponseCode != ResponseCodes.ReportResponseCode.Present)
+            {
+                if (string.IsNullOrEmpty(scanId))
+                {
+                    Console.WriteLine($"Waiting {ScanCompleteDelayBetweenFileReportRequestsMs} ms");
+                    await Task.Delay(ScanCompleteDelayBetweenFileReportRequestsMs);
+                    var scanResult = await ScanFile(fileInfo);
+                    scanId = scanResult.ScanId;
+                    Console.WriteLine($"scanId: {scanId}");
+                }
+                Console.WriteLine($"Waiting {ScanCompleteDelayBetweenFileReportRequestsMs} ms");
+                await Task.Delay(ScanCompleteDelayBetweenFileReportRequestsMs);
+                fileReport = await GetFileReport(scanId);
+            }
+
+            Console.WriteLine($"FileReport: {fileReport}");
+            Console.WriteLine($"Positives: {fileReport.Positives}");
+
+            return new Tuple<int, string>(fileReport.Positives, fileReport.Permalink);
+        }
+
+        /// <summary>
+        /// Performs a URL scan.
+        /// Checks every 16 seconds for result finally returns.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns>A Tuple. Item 1 is positives count (goal: 0). Item 2 is Virus Total permalink for scan.</returns>
+        public async Task<Tuple<int, string>> ScanUrlComplete(string url)
+        {
+            //todo implement time out auto cancel at five minutes
+
+            Console.WriteLine($"Getting Url Report: {url}");
+
+            UrlReport urlReport = null;
+
+            while (urlReport == null || urlReport.ResponseCode != ResponseCodes.ReportResponseCode.Present)
+            {
+                if(urlReport != null) await Task.Delay(ScanCompleteDelayBetweenFileReportRequestsMs);
+                Console.WriteLine($"Waiting {ScanCompleteDelayBetweenFileReportRequestsMs} ms");
+                urlReport = await GetUrlReport(url, true);
+            }
+
+            Console.WriteLine($"FileReport: {urlReport}");
+            Console.WriteLine($"Positives: {urlReport.Positives}");
+
+            return new Tuple<int, string>(urlReport.Positives, urlReport.Permalink);
+        }
+
         /// <summary>
         /// Scan a file.
         /// Note: It is highly encouraged to get the report of the file before scanning, in case it has already been scanned before.
