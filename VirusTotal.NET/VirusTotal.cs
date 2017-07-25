@@ -208,7 +208,7 @@ namespace VirusTotalNET
 
             while (urlReport == null || urlReport.ResponseCode != ResponseCodes.ReportResponseCode.Present)
             {
-                if(urlReport != null) await Task.Delay(ScanCompleteDelayBetweenFileReportRequestsMs);
+                if (urlReport != null) await Task.Delay(ScanCompleteDelayBetweenFileReportRequestsMs);
                 Console.WriteLine($"Waiting {ScanCompleteDelayBetweenFileReportRequestsMs} ms");
                 urlReport = await GetUrlReport(url, true);
             }
