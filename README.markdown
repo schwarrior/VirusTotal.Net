@@ -1,3 +1,7 @@
+# Schwarrior's VirusTotal.NET
+
+Forked from Genbox. Found that a lot of code and know-how was required to do a complete check of a URL or document. Added wrapper class VTComplete that did it all within this assembly. So consuming assemblies could work with this project simply.
+
 # VirusTotal.NET - A full implementation of the VirusTotal 2.0 API
 
 ### Features
